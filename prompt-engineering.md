@@ -12,6 +12,7 @@
 ## Best practice of System Prompt:
 ![](https://www.anthropic.com/_next/image?url=https%3A%2F%2Fwww-cdn.anthropic.com%2Fimages%2F4zrzovbb%2Fwebsite%2F0442fe138158e84ffce92bed1624dd09f37ac46f-2292x1288.png&w=3840&q=75)
 
+
 ## 1. Inspecting Logs and Troubleshooting Errors (Context Engineering)
 
 ### ❌ The Bad Prompt
@@ -133,3 +134,11 @@
 <img width="625" height="806" alt="image" src="https://github.com/user-attachments/assets/5c44239b-c504-47d6-9169-9d7f2b038fa7" />
 
 - [Antropic Guide on Context Engieering](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)
+### [Langchain Docs on context Engineering](https://www.langchain.com/blog/context-engineering-for-agents) || [Principles of context Engineering](https://cognition.ai/blog/dont-build-multi-agents)
+## Problems with Long Context
+[Source](https://www.dbreunig.com/2025/06/22/how-contexts-fail-and-how-to-fix-them.html)
+Context Fails
+- Context Poisoning: When a hallucination makes it into the context
+- Context Distraction: When the context overwhelms the training
+- Context Confusion: When superfluous context influences the response
+- Context Clash: When parts of the context disagree
