@@ -1,2 +1,3 @@
 - [Gemini on Databricks AI Uses](https://gemini.google.com/app/767ffbb1dda1c37b)
-- https://www.databricks.com/blog/pdfs-production-announcing-state-art-document-intelligence-databricks-article
+- [databricks AI functions](https://www.databricks.com/blog/pdfs-production-announcing-state-art-document-intelligence-databricks-article)
+- [Databricks certified AI Engineer](https://www.databricks.com/sites/default/files/2026-03/Databricks-Certified-Generative-AI-Engineer-Associate-Exam-Guide-Mar26.pdf)
