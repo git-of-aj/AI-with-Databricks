@@ -1,0 +1,2 @@
+- [Gemini on Databricks AI Uses](https://gemini.google.com/app/767ffbb1dda1c37b)
+- https://www.databricks.com/blog/pdfs-production-announcing-state-art-document-intelligence-databricks-article
