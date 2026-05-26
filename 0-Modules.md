@@ -202,3 +202,53 @@ You must evaluate them across three categories using tools like LangSmith or Rag
 1. **Functional:** Is the answer factually correct? Is it faithful to the source data without hallucinating? [[16:41](http://www.youtube.com/watch?v=GScUjc-A4yE&t=1001)] Because strings won't match exactly, developers use mathematical concepts like *Cosine Similarity* to check if the generated answer carries the same semantic meaning as the expected answer [[17:50](http://www.youtube.com/watch?v=GScUjc-A4yE&t=1070)].
 2. **Cost & Latency:** Does the agent take too long to run? (Measured in P50 and P99 percentiles). Are token costs going through the roof? [[16:50](http://www.youtube.com/watch?v=GScUjc-A4yE&t=1010)]
 3. **Safety:** Did it leak any PII or fail a jailbreak test? [[17:04](http://www.youtube.com/watch?v=GScUjc-A4yE&t=1024)]
+
+ ## Tokens GOAT Video
+ https://youtu.be/nKSk_TiR8YA?si=Wt_8TgCeAmd0iOrg
+ - Here is an explanation of how LLM tokens work, using the exact examples and analogies from the video.
+
+### Tokens: The Currency of LLMs
+
+Tokens are the currency of Large Language Models. When you use an API to prompt an LLM, you are billed based on the number of tokens you send (input tokens) and the number of tokens the model generates (output tokens). These are usually billed at different rates (e.g., a tiny fraction of a cent per 1,000 tokens) [[00:34](http://www.youtube.com/watch?v=nKSk_TiR8YA&t=34)].
+
+However, different models count tokens differently [[01:20](http://www.youtube.com/watch?v=nKSk_TiR8YA&t=80)]. For example, if you send the exact same prompt—"Hello World"—to two different models:
+
+* **Anthropic (Claude 3.5 Haiku):** Might count it as 11 input tokens.
+* **Google (Gemini 2.0 Flash):** Might count it as 4 input tokens.
+
+To understand why this happens, we have to look at what the LLM is actually doing under the hood.
+
+### How the LLM Processes Text
+
+LLMs do not process text; they compute using **numbers** [[04:04](http://www.youtube.com/watch?v=nKSk_TiR8YA&t=244)]. Every model has a "vocabulary" consisting of words, subwords, and characters, and each of these is assigned a specific number.
+
+Here is the exact end-to-end process [[03:52](http://www.youtube.com/watch?v=nKSk_TiR8YA&t=232)]:
+
+1. **Encoding:** The text you provide is broken down into the largest individual chunks (tokens) that the model recognizes in its vocabulary. For example, "Hello world!" might be split into `Hello`, `_world`, and `!`. The tokenizer looks up the corresponding numbers for these chunks in its vocabulary.
+2. **Computing:** The LLM does all of its thinking and processing using those raw numbers.
+3. **Decoding:** The LLM outputs a sequence of new numbers, which are then decoded back into text and joined together for you to read [[04:11](http://www.youtube.com/watch?v=nKSk_TiR8YA&t=251)].
+
+To put the token-to-text ratio in perspective: If you run a 2,300-character paragraph (like a story about a "wise owl of moonlight forest") through GPT-4o's tokenizer (`o200k_base`), it compresses down to fewer than 500 tokens (numbers) [[03:18](http://www.youtube.com/watch?v=nKSk_TiR8YA&t=198)].
+
+### How Tokenizers are Trained (And Why They Differ)
+
+The reason Anthropic and Google count "Hello World" differently is because they use different tokenizers trained on different data. Let's look at how tokenizers are built using a tiny training corpus: *"the cat sat on the mat"* [[05:05](http://www.youtube.com/watch?v=nKSk_TiR8YA&t=305)].
+
+**1. Character-Level Tokenizer**
+The most basic tokenizer just maps individual characters. In our corpus, there are only 10 unique characters (spaces, t, h, e, c, a, etc.). If we feed the input `"cats sat mat"` (11 characters) into this tokenizer, it outputs exactly 11 tokens [[06:01](http://www.youtube.com/watch?v=nKSk_TiR8YA&t=361)].
+
+This is incredibly inefficient. The more tokens an LLM has to process, the more memory it requires and the harder it has to work [[06:31](http://www.youtube.com/watch?v=nKSk_TiR8YA&t=391)].
+
+**2. The Vocabulary Size Trade-off**
+To reduce the number of tokens, developers group frequently occurring characters into "subwords." Let's look at the word **"understanding"** [[06:43](http://www.youtube.com/watch?v=nKSk_TiR8YA&t=403)]:
+
+* **Small Vocabulary (e.g., 1,000 tokens):** The model might not have "understanding" in its dictionary. It has to break it down into smaller subwords it *does* know: `under` + `st` + `and` + `ing` (5 tokens).
+* **Medium Vocabulary (e.g., 50,000 tokens):** It can match larger chunks: `under` + `standing` (3 tokens).
+* **Large Vocabulary (e.g., 200,000 tokens):** It recognizes the whole word: `understanding` (2 tokens).
+
+Fewer tokens are vastly more efficient for the LLM. However, you cannot scale the vocabulary size to infinity because housing a massive dictionary requires a much larger model and significantly more memory to execute [[07:15](http://www.youtube.com/watch?v=nKSk_TiR8YA&t=435)].
+
+**3. Unusual Words and Languages**
+Tokenizers are optimized for the data they were trained on. If you use a rare word, like **"frabjous"** (a made-up word from a Lewis Carroll poem), the model won't have it in its vocabulary [[09:04](http://www.youtube.com/watch?v=nKSk_TiR8YA&t=544)]. GPT-4o has to aggressively split "frabjous" into 4 separate tokens just to process it.
+
+This is also why coding in JavaScript is cheaper than coding in Haskell in the AI era [[09:37](http://www.youtube.com/watch?v=nKSk_TiR8YA&t=577)]. Because LLMs see vastly more JavaScript than Haskell in their training data, they have highly optimized subwords for JavaScript. Sending 20 lines of JS costs fewer tokens than 20 lines of Haskell!
