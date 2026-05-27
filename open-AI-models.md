@@ -1,3 +1,31 @@
+contract driven api development vs spec driven development
+GitHub MOdels
+Completeion API
+Inference SDK Azuer AI
+
+> It's your responsibility to ensure that the prompt and completion fall within the token limit. For longer conversations, you need to keep track of the token count and only send the model a prompt that falls within the limit. Alternatively, with the responses API you can have the API handle truncation/management of the conversation history for you.
+
+
+Common errors
+401/403 (authentication): Verify your API key, or confirm you have Microsoft Entra ID access to the Azure OpenAI resource.
+400/404 (deployment not found): Confirm that model matches your deployment name.
+Invalid URL: Confirm that base_url ends with /openai/v1/.
+
+Links:
+Pricing: https://developers.openai.com/api/docs/models
+Parameters in Popular LLMs: https://www.ibm.com/think/topics/large-language-models-list
+responses API: https://youtu.be/3Z03fwH1I7s?si=gfQiO_wzHLMJZz7t
+Foundry Models Response API: https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses?tabs=python
+
+Labs:
+- Build AI agents with portal and VS Code: https://microsoftlearning.github.io/mslearn-ai-- agents/Instructions/Exercises/01-build-agent-portal-and-vscode.html
+- Apply guardrails to prevent the output of harmful content: https://microsoftlearning.github.io/mslearn-ai-studio/Instructions/Exercises/06-Explore-content-filters.html
+- Create a generative AI app that uses tools: https://microsoftlearning.github.io/mslearn-ai-studio/Instructions/Exercises/04a-use-own-data.html
+- Create a generative AI chat app: https://microsoftlearning.github.io/mslearn-ai-studio/Instructions/Exercises/03-foundry-sdk.html
+- Explore and compare models: https://microsoftlearning.github.io/mslearn-ai-studio/Instructions/Exercises/02-model-catalog-evaluation.html
+- Prepare for an AI development project: https://microsoftlearning.github.io/mslearn-ai-studio/Instructions/Exercises/01-Explore-ai-studio.html
+
+---
 It is entirely fair to be confused by this. Every AI company—whether it is OpenAI, Anthropic, DeepSeek, X.AI (Grok), or Cohere—likes to invent their own marketing terms. However, under the hood, the underlying computer science and the types of models they offer are fundamentally the same.
 
 ### **Summary Comparison**
