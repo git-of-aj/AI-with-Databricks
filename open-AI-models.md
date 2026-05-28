@@ -100,3 +100,29 @@ Imagine you are in a two-hour business meeting.
 * **Without compaction:** To remember what happened, you have to read a 50-page, word-for-word transcript of everything everyone said. It takes forever.
 * **With compaction:** You read a half-page summary of the "Key Takeaways and Action Items." You lose the exact jokes and small talk (reduced context), but you still know exactly what project you are working on and what needs to be done next (preserved state).
 
+----------
+## Notepad RAW 
+OpenAI trained chat completion models to accept input formatted as a conversation. The messages parameter takes an array of message objects with a conversation organized by role. When you use the Python API, a list of dictionaries is used.
+
+{"role": "assistant", "content": "Provide some context and/or instructions to the model"},
+{"role": "user", "content": "The user's message goes here"}
+
+if 12 banana cost 50 rupees, i had only a 100 ruppee note the shopkeeper says he do not have the change, we both were confused what to do, then he said buy banana of 100 rupee, I refused, then I bought a icecream of Rs 35, but he gave me back one coin of Rs 5, 3  note of Rs 20, banana shopkeeper had no change of Rs 10, so how many banana can I purchase for rs 60?  
+
+https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/chatgpt?tabs=python-secure%2Cdotnet-secure&pivots=programming-language-python#system-role
+
+system role: If you need to include only a small amount of information, you can hard code it in the system message. If you have a large amount of data that the model should be aware of, you can use embeddings or a product like Azure AI Search to retrieve the most relevant information at query time.
+
+After the system role, you can include a series of messages between the user and the assistant.
+
+If you need to include only a small amount of information, you can hard code it in the system message. If you have a large amount of data that the model should be aware of, you can use embeddings or a product like Azure AI Search to retrieve the most relevant information at query time.
+
+Use chat completion for nonchat scenarios
+{"role": "system", "content": "You are an assistant designed to extract entities from text. Users will paste in a string of text and you will respond with entities you've extracted from the text as a JSON object. Here's an example of your output format:
+{
+   "name": "",
+   "company": "",
+   "phone_number": ""
+}"},
+{"role": "user", "content": "Hello. My name is Robert Smith. I'm calling from Contoso Insurance, Delaware. My colleague mentioned that you are interested in learning about our comprehensive benefits policy. Could you give me a call back at (555) 346-9322 when you get a chance so we can go over the benefits?"}
+
