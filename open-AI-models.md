@@ -126,3 +126,35 @@ Use chat completion for nonchat scenarios
 }"},
 {"role": "user", "content": "Hello. My name is Robert Smith. I'm calling from Contoso Insurance, Delaware. My colleague mentioned that you are interested in learning about our comprehensive benefits policy. Could you give me a call back at (555) 346-9322 when you get a chance so we can go over the benefits?"}
 
+azure-ai-vision and content understanding available as models in foundry
+
+- Do any models "see" directly without Base64?
+Yes, absolutely—it just depends on the interface you are using.
+
+If you use the ChatGPT website or the Gemini web app, you just drag and drop a file. You don't deal with Base64 because the website's frontend handles the messy part for you. It uploads your binary image file directly to their servers using a different protocol (like a multipart form upload) to cloud storage, skipping the Base64 API step entirely.
+
+To summarize:
+The AI natively understands visual pixel data. Base64 is just a workaround that developers have to use because of how text-based API pipelines are built.
+
+Important Distinction: Open Source vs Open Weight
+
+People casually say “open source,” but most are actually:
+
+Open weight → model weights downloadable
+NOT fully open source training pipelines/data
+
+RAG with reranking  ==> Response API can help create vector store at openAPI servers, but its all abstracted
+
+Get Question and expected answer pair
+
+For RAG evaluation we test 2 stages:
+1. Document retrieval to test semantic search
+2. Response generation
+
+RAGAS (Retrieval-Augmented Generation Assessment) is an open-source framework designed to evaluate and test the performance of RAG pipelines
+
+Who Validates the Validators? Aligning LLM-Assisted Evaluation
+of LLM Outputs with Human Preferences : https://arxiv.org/pdf/2404.12272
+
+YYOutube Video python code: https://colab.research.google.com/drive/16KCUPgYs6R7ULRFTyqf5zk2IpcEYmJQ5?usp=sharing#scrollTo=Rq5FffUL07oC
+
