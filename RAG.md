@@ -1,3 +1,6 @@
+[Goat Real World problems of RAG](https://arpitbhayani.me/blogs/rag-production/)
+
+## GPT
 Given your background (**Python + SQL databases**), I'd actually recommend this learning path:
 
 ```text
@@ -538,4 +541,46 @@ Similarity Search
 LLM
 ```
 
-If your goal is to become production-ready, I would spend **only 2–3 days on ChromaDB**, then move quickly to **Qdrant** and **pgvector**, because those are the technologies you're most likely to encounter in real production systems today.
+-------------------
+
+### Real World Probs
+
+#### Chunking
+- chunks need to be small enough that retrieved text is specific and relevant, but large enough that they contain complete thoughts. In practice, getting this right requires understanding your document corpus.
+- Always store metadata with each chunk: the source document ID, section heading, page number, creation timestamp, and a content hash. You will need all of these later, both for filtering and for keeping the index current.
+-  15 chunks produces 15 separate vectors, each stored with its own ID. When that document is updated, you cannot simply update a row as you would in a relational database. You need to:
+
+1. Identify all 15 chunk IDs that belong to the old version of the document
+2. Delete them from the vector store
+3. Re-chunk the updated document (which may now produce 17 chunks)
+4. Re-embed and insert the 17 new chunks
+This requires a mapping layer that vector databases do not provide natively. The standard approach is a document registry, a simple relational table (Postgres works fine) that maps each doc_id to the list of chunk vector IDs currently in the index:
+```sql
+CREATE TABLE doc_chunk_registry (
+    doc_id          TEXT NOT NULL,
+    chunk_vector_id TEXT NOT NULL,
+    content_hash    TEXT NOT NULL,
+    version         INTEGER NOT NULL DEFAULT 1,
+    indexed_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    status          TEXT NOT NULL DEFAULT 'active',  -- 'active' | 'deleted' | 'superseded'
+    PRIMARY KEY (doc_id, chunk_vector_id)
+);
+```
+- **Re-Embed Onlyy whats change not everything as a dumbass.. thats why use content hash**
+#### Vectors
+- Every vector in your index was produced by that model. If you switch models, every vector is now incommensurable with the new query embeddings, and you must re-embed the entire corpus.
+#### Indexing Pipeline
+- Your knowledge base is not static. Documents are updated, retracted, corrected, superseded, and deleted. If your indexing pipeline cannot handle these operations correctly, your RAG system will quietly serve stale, contradictory, or deleted information with full confidence.
+- ou start reindexing 10,000 documents, the pipeline crashes at document 6,000, some documents are at version N, some at version N+1, and the seam between them is invisible to the retrieval layer.
+```sql
+rag_index_2026_05_14  (built overnight, fully validated)
+rag_index_current     (alias pointing to above)
+```
+- You build the new index completely, validate it against a benchmark query set, then atomically swap the alias. The old index stays around for a configurable retention period in case rollback is needed. No query ever sees a partial index
+### But My App gives Wrong or Suboptimal answers?
+> might be a false positive from an embedding space where the query and an unrelated chunk happen to land nearby.
+- After reranking, send the top-5 chunks and the query to the LLM with a short system prompt asking it to explain the relevance of each chunk before generating the final answer. The rationale is logged as a structured field on the trace. This is expensive if done per-request, but extremely valuable when run on a sampled basis (say, 1% of production traffic plus 100% of user-flagged responses)
+- **Retrieval vs answer Quality**:after the main LLM generates an answer, send the answer, the retrieved context, and the original question to a smaller, cheaper model with a rubric asking it to score faithfulness (did the answer stay within what the context says?) and relevance (did the answer address the question?). Log these scores alongside the trace ID.
+1. Retrieved chunks are from the wrong document (index corruption or model drift)
+2. Retrieved chunks are from the right document but the wrong section (chunking boundary problem)
+3. Retrieved chunks are correct but the LLM ignored them (a generation problem, not a retrieval problem)
