@@ -1,4 +1,5 @@
 [Goat Real World problems of RAG](https://arpitbhayani.me/blogs/rag-production/)
+- RAG with [azure ai search](https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview?tabs=videos)
 
 ## GPT
 Given your background (**Python + SQL databases**), I'd actually recommend this learning path:
