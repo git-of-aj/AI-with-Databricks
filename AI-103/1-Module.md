@@ -514,7 +514,7 @@ So the answer to your main question is:
 
 > **No, modern LLMs do not skip vector generation. Tokenization converts text into token IDs, and embeddings then convert those IDs into vectors. Those vectors are the actual inputs consumed by the neural network.** Tokenization and embeddings solve different problems, and both are essential parts of the pipeline.
 ---
-# Sction:2 | Microsoft Foundry Models
+# Section:2 | Microsoft Foundry Models
 
 - [Pricing](https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/grok/)
 > Select Model > Deploy
@@ -538,3 +538,12 @@ Deployment type that determines:
 
 [MS Docs Flow chart which when to use](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/deployment-types#choose-the-right-deployment-type)
 > Restrict deployment types with Azure Policy
+
+`Instant Models - no need to deploy.. use straight away -- only for POC !!`
+- During the preview, instant models are available in projects in `West US 3` only as of date: 14 June 2026. [MS Docs](https://learn.microsoft.com/en-us/azure/foundry/concepts/instant-models?tabs=python%2Crest-api)
+- Training = Studying for an exam.
+- Inference = Taking the exam and answering questions based on what you've learned.
+For large language models like ChatGPT, inference means predicting the next word (or token) repeatedly to generate a complete response.
+
+*Compare Models*
+![](https://learn.microsoft.com/en-us/training/wwl-data-ai/model-catalog-evaluate/media/chat-playground.png)
