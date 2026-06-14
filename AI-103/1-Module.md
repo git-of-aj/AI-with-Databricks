@@ -513,3 +513,28 @@ Vectors → New vectors → Output
 So the answer to your main question is:
 
 > **No, modern LLMs do not skip vector generation. Tokenization converts text into token IDs, and embeddings then convert those IDs into vectors. Those vectors are the actual inputs consumed by the neural network.** Tokenization and embeddings solve different problems, and both are essential parts of the pipeline.
+---
+# Sction:2 | Microsoft Foundry Models
+
+- [Pricing](https://azure.microsoft.com/en-us/pricing/details/ai-foundry-models/grok/)
+> Select Model > Deploy
+- By default, the deployment uses the model name. You can modify this name before deploying.
+- During inference, the deployment name is used in the model parameter to route requests to this particular deployment.
+
+**Deployment**:
+Deployment type that determines:
+
+- Where your data is processed (global, data zone, or single region)
+- How you pay (pay-per-token or reserved capacity)
+- Performance characteristics (latency variance, throughput limits)
+- The service offers two main categories: standard (pay-per-token) and provisioned (reserved capacity). Within each category, you can choose global, data zone, or regional processing based on your compliance requirements.
+
+**Selected Region is used but:** 
+> Data stored at rest remains in the designated Azure geography. However, inferencing data is processed as follows:
+
+- Global types: May be processed in any Azure region
+- DataZone types: Processed only within the Microsoft-specified data zone (US or EU)
+- Standard/Regional types: Processed in the deployment region
+
+[MS Docs Flow chart which when to use](https://learn.microsoft.com/en-us/azure/foundry/foundry-models/concepts/deployment-types#choose-the-right-deployment-type)
+> Restrict deployment types with Azure Policy
