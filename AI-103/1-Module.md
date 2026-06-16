@@ -547,3 +547,54 @@ For large language models like ChatGPT, inference means predicting the next word
 
 *Compare Models*
 ![](https://learn.microsoft.com/en-us/training/wwl-data-ai/model-catalog-evaluate/media/chat-playground.png)
+
+### SDK and Endpoint
+**One-line Memory Trick**
+
+**Foundry = Project-centric + Entra ID + Responses API**
+**Azure OpenAI = Full OpenAI surface + Entra/API Key + Responses/Chat Completions**
+
+#### Choosing an Endpoint and SDK (Azure AI Foundry vs Azure OpenAI)
+
+#### Quick Decision Rule
+
+* **Use Foundry Project Endpoint + Microsoft Foundry SDK** when you need:
+
+  * Foundry-native project operations
+  * OpenAI-compatible interfaces for **Foundry direct models**
+* **Use Azure OpenAI Endpoint + OpenAI SDK** when you need:
+
+  * Full OpenAI API surface
+  * Latest OpenAI SDK features
+  * Broader model support
+
+> **Endpoint choice drives authentication and API surface.**
+
+---
+
+#### Comparison Table
+
+| Aspect             | Foundry Project                                      | Azure OpenAI                                            |
+| ------------------ | ---------------------------------------------------- | ------------------------------------------------------- |
+| **Endpoint**       | Project endpoint (`.../api/projects/{project-name}`) | Azure OpenAI endpoint (`...openai.azure.com/openai/v1`) |
+| **SDK**            | Microsoft Foundry SDK (`azure-ai-projects`)          | OpenAI SDK (`openai`)                                   |
+| **Authentication** | Microsoft Entra ID only                              | Microsoft Entra ID or API Key                           |
+| **Chat API**       | Responses API                                        | Responses API or Chat Completions API                   |
+| **Best For**       | Foundry-specific capabilities and direct models      | Full OpenAI functionality and latest features           |
+
+---
+## Tools 
+- Use tools like remote MCP servers or web search to extend the model's capabilities else models answers only based on its training data. Play here: https://aistudio.google.com/prompts/new_chat
+<img width="1531" height="638" alt="image" src="https://github.com/user-attachments/assets/d69f5e66-1c7e-4ba1-b41a-571aa3a50539" />
+
+> By default, the model chooses when to use a tool (and which one), based on the prompt. You can configure tool selection rules and use the Instructions (system prompt) parameter to guide this choice.
+
+Some of the commonly used tools available in the Responses API, include:
+
+- code_interpreter: A Python environment in which the model can generate and run code.
+- web_search: A tool that enables the model to find general information on the Internet, which allows it to base responses on more current data than it was trained on.
+- file_search: A tool that enables the model to search specific files that you upload to a dedicated vector search index - enabling it to ground responses in specific knowledge.
+- function: A tool that enables the model to call custom functions in your application code.
+> 💡specify one or more tools in a call to the responses.create() method when generating a response from a model.
+
+
