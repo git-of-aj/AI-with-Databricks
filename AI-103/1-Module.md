@@ -640,6 +640,7 @@ There are two main agent types in Agent Service:
 - Each agent can have a dedicated Microsoft Entra identity, enabling secure, scoped access to resources and APIs without sharing credentials
 > usually you add skills to agent like MS officially published skills for coding agents: https://github.com/microsoft/azure-skills
 - [IBM: Types of AI Agents](https://www.ibm.com/think/topics/ai-agent-types)
+  
 ## Glue the agent logic together
 [Microsoft Agent Framework](https://azure.microsoft.com/en-us/blog/introducing-microsoft-agent-framework/) and its [docs](https://learn.microsoft.com/en-us/agent-framework/overview/?pivots=programming-language-python)
 OR Use alternatives
