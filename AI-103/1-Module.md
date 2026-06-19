@@ -623,7 +623,10 @@ Some of the commonly used tools available in the Responses API, include:
 As a general guide, most solutions benefit primarily from prompt engineering. RAG is useful if you have context-specific data you want the model to take account of, and fine-tuning is used only when you can’t achieve the required tone and style in your model responses through prompt engineering. In terms of cost, prompt engineering incurs the lowest cost, followed by RAG as you need to pay for data storage and index hosting. Finally, fine-tuning is usually the most expensive option due to the compute overhead required to perform the training.
 
 - **system prompts as “role + constraints + output format expectations.**
+> ChatGPT is fundamentally a Large Language Model (LLM) at its core, but it operates as an AI agent through its additional built-in systems, integrations, and tools. 
 # Foundry Agents
+<img width="1456" height="715" alt="image" src="https://github.com/user-attachments/assets/c69b3a1a-f309-4982-9893-61a60147209e" />
+
 > Actions speak louder than work.. Agent do work while Models Jsut talk.
 `An agent is an AI application that uses a model from the Foundry model catalog to reason about user requests and take autonomous actions to fulfill them`
 There are two main agent types in Agent Service:
@@ -635,4 +638,41 @@ There are two main agent types in Agent Service:
 - `Foundry` Agent Service provides built-in tools and supports custom tools so your agents can take actions and access data.
 - `Collection / Folder of tools... Easy to share`: Toolbox lets you define a curated set of tools once, manage them centrally in Foundry, and expose them through a single MCP-compatible endpoint.
 - Each agent can have a dedicated Microsoft Entra identity, enabling secure, scoped access to resources and APIs without sharing credentials
+> usually you add skills to agent like MS officially published skills for coding agents: https://github.com/microsoft/azure-skills
+- [IBM: Types of AI Agents](https://www.ibm.com/think/topics/ai-agent-types)
+## Glue the agent logic together
+[Microsoft Agent Framework](https://azure.microsoft.com/en-us/blog/introducing-microsoft-agent-framework/) and its [docs](https://learn.microsoft.com/en-us/agent-framework/overview/?pivots=programming-language-python)
+OR Use alternatives
+- LangGraph (with LangChain) is the gravity well. It’s a graph-based agent runtime with the biggest ecosystem, the most integrations, and a steep learning curve. Strong for stateful, branching agents that need persistence and human-in-the-loop steps. Weakness: a sprawling API surface and a reputation, partly earned, for breaking changes. Use it when your flow is genuinely complex.
 
+- OpenAI Agents SDK is the lightweight, opinionated alternative. Built-in tracing, handoffs between agents, guardrails. Cleanest path if your stack is OpenAI-first or near-first. It’s now model-agnostic enough to use with Claude and others, but its developer experience shines brightest in the OpenAI ecosystem.
+
+- CrewAI is the role-based multi-agent framework. You define agents with roles, goals, and tools, then a process for how they collaborate. Good for prototyping crew-like workflows. The honest critique: many CrewAI projects would be faster and more reliable as a single agent with the right tools
+> The reason these three matter more than anything else is that they decide which set of frameworks you’re even shopping in. A TypeScript team should not be evaluating CrewAI. A visual-builder team should not be reading LangGraph docs. Saying these out loud at the start of a project saves entire weeks.
+Most teams choose one too early.
+
+Before picking LangGraph, CrewAI, Microsoft Agent Framework, LlamaIndex Workflows, OpenAI Agents SDK or Google ADK, I would ask:
+
+- Where does state live?
+- Who approves risky actions?
+- How do we replay failures?
+- How do we debug tool calls?
+- How do we stop runaway cost?
+- Can this run in our deployment environment?
+
+Frameworks help, but they do not remove architecture.
+
+- LangGraph gives explicit control.
+- CrewAI gives a simple collaboration model.
+- LlamaIndex is strong near data/RAG.
+- Microsoft Agent Framework makes sense for Microsoft-centric shops.
+- OpenAI Agents SDK is the safer current OpenAI path.
+- Google ADK fits Gemini/Google Cloud teams.
+
+`The best harness is the one your team can operate at 2 AM.`
+
+# AI Agent or AI Workflow - whats better?
+source: https://aishwaryasrinivasan.substack.com/p/all-you-need-to-know-about-ai-agent
+- A workflow is a predetermined sequence of LLM calls. You wrote the steps. The model fills in the content. Predictable, debuggable, cheap.
+- An agent is a loop where the model itself decides the next step. It picks tools, retries, branches. Flexible, but slower, more expensive, and harder to debug.
+- The rule almost nobody follows: prefer workflows. Reach for agents only when the task genuinely cannot be predetermined, which is a smaller share of real use cases
