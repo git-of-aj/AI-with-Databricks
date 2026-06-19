@@ -597,4 +597,42 @@ Some of the commonly used tools available in the Responses API, include:
 - function: A tool that enables the model to call custom functions in your application code.
 > 💡specify one or more tools in a call to the responses.create() method when generating a response from a model.
 
+| Tool                                                                        | Who writes the code? | Who executes it?                  |
+| --------------------------------------------------------------------------- | -------------------- | --------------------------------- |
+| **Function Calling**                                                        | You (the developer)  | Your application/backend          |
+| **Code Interpreter** (aka Computer Use / Python tool depending on platform) | The LLM              | A sandboxed execution environment |
+
+| Dimension                    | OpenAI `file_search`                            | Custom RAG                                                            | Real-World Example                                                                                                                   |
+| ---------------------------- | ----------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| **Setup & Speed**            | Upload files and start querying quickly.        | Build ingestion, embeddings, retrieval pipelines.                     | **file_search:** Internal HR policy chatbot in a day. **Custom RAG:** Enterprise search platform built over months.                  |
+| **Data Sources & Freshness** | Best for static uploaded documents.             | Can connect to live databases, APIs, CRMs, and knowledge tools.       | **file_search:** Employee handbook Q&A. **Custom RAG:** Customer support agent pulling real-time order status.                       |
+| **Control & Optimization**   | Limited control over retrieval behavior.        | Full control over chunking, reranking, hybrid search, Graph RAG, etc. | **file_search:** Simple document lookup. **Custom RAG:** Legal research system using advanced ranking and citations.                 |
+| **Operations & Cost**        | Fully managed, low maintenance.                 | Requires infrastructure, monitoring, and ongoing maintenance.         | **file_search:** Startup prototype with minimal engineering effort. **Custom RAG:** Large enterprise managing millions of documents. |
+| **Best Use Cases**           | Knowledge assistants, document Q&A, prototypes. | Enterprise search, regulated industries, complex AI agents.           | **file_search:** Company wiki chatbot. **Custom RAG:** Bank compliance assistant with audit and governance requirements.             |
+
+## Now its not just LLM its about agents..
+> Prompt engineering focuses on what you ask the model. Context engineering focuses on everything the model knows while answering.
+| Prompt Engineering           | Context Engineering                                                  |
+| ---------------------------- | -------------------------------------------------------------------- |
+| Wording the instruction      | Managing all information available to the model                      |
+| Focuses on prompts           | Focuses on information flow                                          |
+| "Act as a teacher"           | "Give the model the student's history, curriculum, and test results" |
+| Usually a single interaction | Often a complete system architecture                                 |
+
+> “If answers are wrong → add grounding. If answers are messy/inconsistent → tighten prompts or fine-tune.”
+As a general guide, most solutions benefit primarily from prompt engineering. RAG is useful if you have context-specific data you want the model to take account of, and fine-tuning is used only when you can’t achieve the required tone and style in your model responses through prompt engineering. In terms of cost, prompt engineering incurs the lowest cost, followed by RAG as you need to pay for data storage and index hosting. Finally, fine-tuning is usually the most expensive option due to the compute overhead required to perform the training.
+
+- **system prompts as “role + constraints + output format expectations.**
+# Foundry Agents
+> Actions speak louder than work.. Agent do work while Models Jsut talk.
+`An agent is an AI application that uses a model from the Foundry model catalog to reason about user requests and take autonomous actions to fulfill them`
+There are two main agent types in Agent Service:
+
+1. Prompt agents — author in portal or code, fully managed runtime.
+2. Hosted agents (preview) — your agent code, run by Foundry.
+3. Agents running on AKS, Langraph etc use reponse API from Foundry to give them LLM access.
+
+- `Foundry` Agent Service provides built-in tools and supports custom tools so your agents can take actions and access data.
+- `Collection / Folder of tools... Easy to share`: Toolbox lets you define a curated set of tools once, manage them centrally in Foundry, and expose them through a single MCP-compatible endpoint.
+- Each agent can have a dedicated Microsoft Entra identity, enabling secure, scoped access to resources and APIs without sharing credentials
 
