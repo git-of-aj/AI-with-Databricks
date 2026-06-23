@@ -677,3 +677,12 @@ source: https://aishwaryasrinivasan.substack.com/p/all-you-need-to-know-about-ai
 - A workflow is a predetermined sequence of LLM calls. You wrote the steps. The model fills in the content. Predictable, debuggable, cheap.
 - An agent is a loop where the model itself decides the next step. It picks tools, retries, branches. Flexible, but slower, more expensive, and harder to debug.
 - The rule almost nobody follows: prefer workflows. Reach for agents only when the task genuinely cannot be predetermined, which is a smaller share of real use cases
+
+### Conversations vs Response API
+| Feature           | Using Conversations API (`conversation_id`)       | Chaining via `previous_response_id`                         |
+| ----------------- | ------------------------------------------------- | ----------------------------------------------------------- |
+| **Concept**       | A persistent server-side chat session.            | A chain where each response links to the previous one.      |
+| **ID Management** | Reuse the same `conversation_id` for all turns.   | Store and pass the latest response ID on every turn.        |
+| **Memory**        | Conversation history is automatically maintained. | Context comes from the linked response chain.               |
+| **Branching**     | No, history progresses linearly.                  | Yes, older response IDs can be reused to create forks.      |
+| **Best For**      | Chatbots, agents, and long-running conversations. | Lightweight workflows, testing, and conversation branching. |
