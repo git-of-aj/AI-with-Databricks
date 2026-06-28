@@ -583,6 +583,21 @@ For large language models like ChatGPT, inference means predicting the next word
 | **Best For**       | Foundry-specific capabilities and direct models      | Full OpenAI functionality and latest features           |
 
 ---
+
+- https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/sdk-overview?pivots=programming-language-python
+1. Use Foundry SDK when building apps with agents, evaluations, or Foundry-specific features
+2. Use Agent Framework when building hosted agents or multi-agent systems in code using the Responses API
+3. Use OpenAI SDK when maximum OpenAI compatibility or lowest latency is required, when generating embeddings, or when using Foundry direct models via Chat Completions
+4. Use Anthropic SDK when working with Anthropic Claude models deployed in Foundry
+5. Use Foundry Tools SDKs when working with specific AI services (Vision, Speech, Language, etc.)
+
+> The Responses API is the programmatic interface for every model in Microsoft Foundry. Pass model-router in the model field to let Foundry pick the best model automatically. Or pass a specific model name for deterministic control. The code is the same—only the model value changes.
+check code here: https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/responses-model-routing
+
+- Managed compute deployment (preview) in Microsoft Foundry hosts open-source models on dedicated GPU capacity. Microsoft owns the GPU topology, runtime, container image, and security patching. You choose the model, deployment template, accelerator family, and scaling behavior that fit your workload
+
+> See all best practices on left side: https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/prompt-engineering
+---
 ## Tools 
 - Use tools like remote MCP servers or web search to extend the model's capabilities else models answers only based on its training data. Play here: https://aistudio.google.com/prompts/new_chat
 <img width="1531" height="638" alt="image" src="https://github.com/user-attachments/assets/d69f5e66-1c7e-4ba1-b41a-571aa3a50539" />
