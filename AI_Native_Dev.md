@@ -10,11 +10,11 @@
 > The notable trend is that the gap between the top contenders is now small. Choice increasingly depends on your workflow (CLI agent vs IDE vs autonomous execution), budget, and repository size rather than a single universally superior model.
 ```mermaid
 flowchart TD
-    A[Claude Code]
-    B[Claude Opus<br/>(Planning)]
-    C[Claude Sonnet<br/>(Implementation)]
-    D[Git]
-    E[CI/CD]
+    A["Claude Code"]
+    B["Claude Opus - Planning"]
+    C["Claude Sonnet - Implementation"]
+    D["Git"]
+    E["CI/CD"]
 
     A --> B
     B --> C
