@@ -92,3 +92,5 @@ These three agentic protocols are complementary and have distinct technical goal
                     │ Model                    │
                     └─────────────────────────┘
 ```
+
+Harness Code: https://github.com/microsoft/agent-framework/tree/main/python/samples/02-agents/harness/build_your_own_claw
