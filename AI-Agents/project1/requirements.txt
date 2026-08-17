@@ -1,4 +1,5 @@
 flask
+flask[async]
 python-dotenv
 azure-identity
 agent-framework-foundry
