@@ -1,0 +1,11 @@
+Sarah: Yesterday I finished the login timeout fix and opened PR 142.
+
+John: I reviewed the payment changes but I'm still waiting for the database team
+to confirm the schema change.
+
+Mike: The customer reported that invoice emails are delayed. I'll investigate
+that today.
+
+Sarah: I can also help John with the database issue after the login fix is merged.
+
+John: My main blocker is getting confirmation from the database team.

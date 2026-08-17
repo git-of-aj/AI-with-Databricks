@@ -10,7 +10,7 @@ from agent_framework import Agent, AgentSession, ContextProvider, SessionContext
 from agent_framework.foundry import FoundryChatClient
 from azure.identity import AzureCliCredential
 
-load_dotenv()
+load_dotenv('../.env')
 
 app = Flask(__name__)
 
