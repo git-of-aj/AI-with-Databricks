@@ -2,6 +2,31 @@
 [MS Docs](https://learn.microsoft.com/en-us/agent-framework/hosting/)
 - https://learn.microsoft.com/en-us/agent-framework/get-started/hosting?pivots=programming-language-python#hosting-options
 
+##### Like Foundry Agent `Publish` Option
+```txt
+Your website / app
+       │
+       │ HTTPS request
+       ▼
+Your backend API
+       │
+       │ Python SDK
+       ▼
+Azure AI Foundry Agent
+       │
+       ├── Your instructions
+       ├── Tools
+       ├── Knowledge / files
+       └── Model
+```
+
+- Foundry Sample code has `isolation key`
+> The isolation key is related to how sessions are isolated. For a multi-user application, you should design the session lifecycle around your users/conversations rather than treating the entire application as one conversation.
+
+For example, conceptually:
+`isolation_key = f"user-{user_id}"`
+or another appropriate application-specific isolation strategy
+
 ### How will my agent communicate ?
 ```txt
                          ┌───────────────┐
