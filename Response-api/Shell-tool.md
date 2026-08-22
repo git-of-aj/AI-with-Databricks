@@ -5,4 +5,8 @@
 - Running arbitrary shell commands can be dangerous. Always sandbox execution, apply allow lists or block lists where possible, and log tool activity for auditing.
 - Set the environment to container_auto to let Azure OpenAI provision and manage a container for the request. The model decides whether to call the tool based on your prompt.
 - Link: https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/shells?tabs=python
+- [Good Docs for what is skill and when to use](https://developers.openai.com/cookbook/examples/skills_in_api)
 - Inline skills are useful when you want a skill to live only for the duration of a single container's lifecycle.
+- No, the full content of a SKILL.md file is not loaded as input tokens in every API call. OpenAI uses progressive disclosure, injecting only lightweight metadata (name and description) into the initial context, and loading the heavy instruction body on demand only when the model determines the skill is relevant.
+- `tool_search` is available after gpt 5.4 or later
+- 
