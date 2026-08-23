@@ -1,0 +1,11 @@
+2026-08-23T18:01:03Z INFO  payments-api Starting request id=abc123 endpoint=/payments
+2026-08-23T18:01:04Z INFO  payments-api Calling payment-db
+2026-08-23T18:01:08Z WARN  payments-api Database response time exceeded 3000ms
+2026-08-23T18:01:12Z ERROR payments-api HTTP 504 Gateway Timeout endpoint=/payments
+2026-08-23T18:01:12Z ERROR payments-api TimeoutError: database request exceeded 5000ms
+2026-08-23T18:01:13Z WARN  payments-api Retrying database request attempt=1
+2026-08-23T18:01:18Z ERROR payments-api HTTP 504 Gateway Timeout endpoint=/payments
+2026-08-23T18:01:18Z ERROR payments-api TimeoutError: database request exceeded 5000ms
+2026-08-23T18:02:01Z INFO  payments-api Starting request id=abc456 endpoint=/payments
+2026-08-23T18:02:06Z ERROR payments-api HTTP 403 Forbidden endpoint=/payments
+2026-08-23T18:02:06Z ERROR payments-api AuthorizationError: insufficient permissions

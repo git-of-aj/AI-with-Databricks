@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Assistant</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 60px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            color: #1f2937;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 140px;
+            padding: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+        }
+
+        button {
+            margin-top: 15px;
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 8px;
+            background: #f3f4f6;
+            display: none;
+        }
+
+        .result.success {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+
+        .result.info {
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #1e40af;
+        }
+
+        .result.error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .ticket-details {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .ticket-details p {
+            margin: 7px 0;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            margin-top: 15px;
+            color: #6b7280;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="card">
+
+            <h1>Support Assistant</h1>
+
+            <p class="subtitle">
+                Ask a billing, technical, HR, or account-related question.
+            </p>
+
+            <textarea
+                id="message"
+                placeholder="Example: I was charged twice for my subscription..."
+            ></textarea>
+
+            <button id="submitButton" onclick="submitRequest()">
+                Submit
+            </button>
+
+            <div id="loading" class="loading">
+                Processing your request...
+            </div>
+
+            <div id="result" class="result">
+                <div id="resultMessage"></div>
+                <div id="ticketDetails" class="ticket-details"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+        async function submitRequest() {
+
+            const messageInput = document.getElementById("message");
+            const submitButton = document.getElementById("submitButton");
+            const loading = document.getElementById("loading");
+            const result = document.getElementById("result");
+            const resultMessage = document.getElementById("resultMessage");
+            const ticketDetails = document.getElementById("ticketDetails");
+
+            const message = messageInput.value.trim();
+
+            // Validate input
+            if (!message) {
+                showResult(
+                    "Please enter a message.",
+                    "error"
+                );
+                return;
+            }
+
+            // Reset UI
+            result.style.display = "none";
+            ticketDetails.innerHTML = "";
+
+            submitButton.disabled = true;
+            loading.style.display = "block";
+
+            try {
+
+                const response = await fetch(
+                    "http://localhost:8000/classify",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Accept": "application/json",
+                            "Content-Type": "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            message: message
+                        })
+                    }
+                );
+
+                // Check HTTP status
+                if (!response.ok) {
+                    throw new Error(
+                        `Server returned ${response.status}`
+                    );
+                }
+
+                const data = await response.json();
+
+                // Display the main message
+                resultMessage.textContent = data.message;
+
+                // If a ticket was created, display details
+                if (data.ticket) {
+
+                    const ticket = data.ticket;
+
+                    ticketDetails.innerHTML = `
+                        <p>
+                            <span class="label">Ticket:</span>
+                            ${ticket.ticket_number}
+                        </p>
+
+                        <p>
+                            <span class="label">Category:</span>
+                            ${ticket.category}
+                        </p>
+
+                        <p>
+                            <span class="label">Issue:</span>
+                            ${ticket.issue}
+                        </p>
+
+                        <p>
+                            <span class="label">Priority:</span>
+                            ${ticket.priority}
+                        </p>
+
+                        <p>
+                            <span class="label">Team:</span>
+                            ${ticket.recommended_team}
+                        </p>
+
+                        <p>
+                            <span class="label">Sentiment:</span>
+                            ${ticket.sentiment}
+                        </p>
+                    `;
+
+                    showResult(
+                        data.message,
+                        "success"
+                    );
+
+                } else {
+
+                    // No ticket was created
+                    showResult(
+                        data.message,
+                        "info"
+                    );
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                showResult(
+                    "Unable to connect to the support server. " +
+                    "Make sure FastAPI is running on localhost:8000.",
+                    "error"
+                );
+
+            } finally {
+
+                submitButton.disabled = false;
+                loading.style.display = "none";
+            }
+        }
+
+
+        function showResult(message, type) {
+
+            const result = document.getElementById("result");
+            const resultMessage = document.getElementById("resultMessage");
+
+            result.className = `result ${type}`;
+            resultMessage.textContent = message;
+
+            result.style.display = "block";
+        }
+
+
+        // Allow Ctrl + Enter to submit
+        document.getElementById("message").addEventListener(
+            "keydown",
+            function(event) {
+
+                if (event.ctrlKey && event.key === "Enter") {
+                    submitRequest();
+                }
+
+            }
+        );
+    </script>
+
+</body>
+</html>
