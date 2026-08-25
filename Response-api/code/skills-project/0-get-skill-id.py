@@ -1,32 +1,27 @@
 """
- 5  export MY_FOUNDRY_ENDPOINT="https://project-01-us.services.ai.azure.com/api/projects/14juneproject"
-    6  echo MY_FOUNDRY_ENDPOINT
-    7  echo $MY_FOUNDRY_ENDPOINT
-    8  nano 1.py
-    9  python -m venv venv 
-   10  source venv/bin/activate
-   11  pip install azure-ai-projects azure-identity
-   12  python 1.py 
-   13  history
+export MY_FOUNDRY_ENDPOINT="https://project-01-us.services.ai.azure.com/api/projects/14juneproject"
+echo $MY_FOUNDRY_ENDPOINT
+nano 1.py
+python -m venv venv 
+source venv/bin/activate
+pip install azure-ai-projects azure-identity
+python 1.py 
 """
 
-
-import os
 from azure.identity import DefaultAzureCredential
 from azure.ai.projects import AIProjectClient
 
-endpoint = os.environ["MY_FOUNDRY_ENDPOINT"]
+# Create Foundry project client
+endpoint = "https://foundry0309.services.ai.azure.com/api/projects/proj-default"
 
-with AIProjectClient(
-    endpoint=endpoint,
-    credential=DefaultAzureCredential(),
-    allow_preview=True,
-) as project:
-
+with (
+    DefaultAzureCredential() as credential,
+    AIProjectClient(
+        endpoint=endpoint, credential=credential, allow_preview=True
+    ) as project,
+):
+    # List all skills in the project
     skills = list(project.beta.skills.list())
-
+    print(f"Found {len(skills)} skill(s)")
     for skill in skills:
-        print(f"Name: {skill.name}")
-        print(f"Skill ID: {skill.id}")
-        print(f"Default version: {skill.default_version}")
-        print()
+        print(f"{skill.name} has ID: {skill.id } (default: {skill.default_version})")
