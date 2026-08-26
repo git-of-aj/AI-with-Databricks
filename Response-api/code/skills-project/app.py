@@ -7,11 +7,11 @@ load_dotenv()
 # Configuration
 # ---------------------------------------------------------
 
-ENDPOINT = os.environ["MY_ENDPOINT"]
+ENDPOINT = "https://project-01-us.openai.azure.com/openai/v1"
 MODEL = "gpt-5.4-mini"
 API_KEY = os.getenv("MY_KEY")
 
-SKILL_ID = "skill_eecae3cab6e31b2c23b46f6ceb7f5d8aa2aef075"
+SKILL_ID = "skill_eecae3cab6e31b2c23b46f6ceb7f5d8aa2aef075" # RCA_ANALYZER
 
 LOG_FILE = r"C:\Users\Ananay.Ojha\Downloads\AI-with-Databricks\Response-api\code\skills-project\sample.log"
 
