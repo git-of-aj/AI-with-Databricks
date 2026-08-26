@@ -1,0 +1,15 @@
+{
+	"servers": {
+		"employee detail checker": {
+		"type": "stdio",
+		"command": "C:\\Users\\anana\\.local\\bin\\uv.exe",
+		"args": [
+			"run",
+			"main.py"
+		],
+		"cwd": "C:\\Users\\anana\\Downloads\\AI-with-Databricks\\MCP-Code\\your-own-mcp-server"
+	}
+
+	},
+	"inputs": []
+}

@@ -286,4 +286,3 @@ def update_employee_details(
         "employee_id": empID,
         "employee": employee
     }
-
