@@ -16,6 +16,25 @@ uv pip install agent-framework azure-identity dotenv
 
 - docs for Less code more easy MCP Interaction: https://learn.microsoft.com/en-us/agent-framework/agents/tools/hosted-mcp-tools?pivots=programming-language-python
 
+# Approval
+```txt
+User
+  ↓
+Agent
+  ↓
+MCP approval request
+  ↓
+Terminal: Allow? y/n
+  ↓
+Approval response + original context
+  ↓
+Agent
+  ↓
+GitHub tool
+  ↓
+Final answer
+```
+
 # OBO Flow in MCP 
 In simple English, this flow means:
 
