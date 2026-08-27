@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Azure Foundry Agent</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background: #f6f7f9;
+        }
+
+        h1 {
+            color: #222;
+        }
+
+        #chat {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 400px;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            margin: 12px 0;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .user {
+            background: #e8f1ff;
+        }
+
+        .assistant {
+            background: #f0f0f0;
+        }
+
+        .approval {
+            background: #fff4d6;
+            border: 1px solid #e5bd55;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        pre {
+            background: #222;
+            color: #eee;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        input {
+            width: calc(100% - 110px);
+            padding: 12px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 12px 18px;
+            margin: 4px;
+            cursor: pointer;
+        }
+
+        #send {
+            width: 90px;
+        }
+
+        #signin {
+            background: #0078d4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .approve {
+            background: #107c10;
+            color: white;
+            border: none;
+        }
+
+        .reject {
+            background: #d13438;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Azure Foundry Agent</h1>
+
+<button id="signin">
+    Sign in with Microsoft
+</button>
+
+<span id="user"></span>
+
+<div id="chat"></div>
+
+<div>
+    <input
+        id="message"
+        placeholder="Ask Azure documentation..."
+        disabled
+    >
+
+    <button
+        id="send"
+        disabled
+    >
+        Send
+    </button>
+</div>
+
+
+<script>
+
+    // ------------------------------------------------------------------
+    // Configuration
+    // ------------------------------------------------------------------
+
+    const TENANT_ID = "YOUR-TENANT-ID";
+
+    // This is the Application / Client ID used by the FastAPI API.
+    const CLIENT_ID = "YOUR-API-CLIENT-ID";
+
+    // Expose this scope in your Entra application.
+    //
+    // Example:
+    // api://YOUR-API-CLIENT-ID/access_as_user
+    //
+    const API_SCOPE =
+        "api://" + CLIENT_ID + "/access_as_user";
+
+
+    const msalConfig = {
+        auth: {
+            clientId: CLIENT_ID,
+
+            authority:
+                "https://login.microsoftonline.com/" +
+                TENANT_ID,
+
+            redirectUri:
+                window.location.origin
+        },
+
+        cache: {
+            cacheLocation: "sessionStorage"
+        }
+    };
+
+
+    const msalInstance =
+        new msal.PublicClientApplication(msalConfig);
+
+
+    let accessToken = null;
+    let conversationId = null;
+
+
+    // ------------------------------------------------------------------
+    // UI helpers
+    // ------------------------------------------------------------------
+
+    function addMessage(
+        role,
+        text
+    ) {
+        const chat =
+            document.getElementById("chat");
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "message " + role;
+
+        div.innerText =
+            text;
+
+        chat.appendChild(div);
+
+        chat.scrollTop =
+            chat.scrollHeight;
+    }
+
+
+    function setEnabled(enabled) {
+
+        document.getElementById(
+            "message"
+        ).disabled = !enabled;
+
+        document.getElementById(
+            "send"
+        ).disabled = !enabled;
+    }
+
+
+    // ------------------------------------------------------------------
+    // Authentication
+    // ------------------------------------------------------------------
+
+    async function signIn() {
+
+        const loginResponse =
+            await msalInstance.loginPopup({
+                scopes: [
+                    API_SCOPE
+                ]
+            });
+
+        document.getElementById(
+            "user"
+        ).innerText =
+            "Signed in as " +
+            (
+                loginResponse.account.username
+                || loginResponse.account.name
+            );
+
+        const tokenResponse =
+            await msalInstance.acquireTokenSilent({
+                account:
+                    loginResponse.account,
+
+                scopes: [
+                    API_SCOPE
+                ]
+            });
+
+        accessToken =
+            tokenResponse.accessToken;
+
+        setEnabled(true);
+
+        addMessage(
+            "assistant",
+            "You are signed in. Ask me an Azure question."
+        );
+    }
+
+
+    // ------------------------------------------------------------------
+    // Get token
+    // ------------------------------------------------------------------
+
+    async function getToken() {
+
+        const accounts =
+            msalInstance.getAllAccounts();
+
+        if (!accounts.length) {
+            await signIn();
+        }
+
+        const account =
+            msalInstance.getAllAccounts()[0];
+
+        try {
+
+            const response =
+                await msalInstance.acquireTokenSilent({
+                    account: account,
+                    scopes: [
+                        API_SCOPE
+                    ]
+                });
+
+            accessToken =
+                response.accessToken;
+
+        } catch (error) {
+
+            const response =
+                await msalInstance.acquireTokenPopup({
+                    account: account,
+                    scopes: [
+                        API_SCOPE
+                    ]
+                });
+
+            accessToken =
+                response.accessToken;
+        }
+
+        return accessToken;
+    }
+
+
+    // ------------------------------------------------------------------
+    // Chat
+    // ------------------------------------------------------------------
+
+    async function sendMessage() {
+
+        const input =
+            document.getElementById(
+                "message"
+            );
+
+        const message =
+            input.value.trim();
+
+        if (!message) {
+            return;
+        }
+
+        input.value = "";
+
+        addMessage(
+            "user",
+            message
+        );
+
+        setEnabled(false);
+
+        try {
+
+            const token =
+                await getToken();
+
+            const response =
+                await fetch(
+                    "/api/chat",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                "Bearer " +
+                                token
+                        },
+
+                        body: JSON.stringify({
+                            message:
+                                message,
+
+                            conversation_id:
+                                conversationId
+                        })
+                    }
+                );
+
+            if (!response.ok) {
+
+                const error =
+                    await response.text();
+
+                throw new Error(
+                    error
+                );
+            }
+
+            const data =
+                await response.json();
+
+            conversationId =
+                data.conversation_id;
+
+            handleAgentResponse(
+                data
+            );
+
+        } catch (error) {
+
+            addMessage(
+                "assistant",
+                "Error: " +
+                error.message
+            );
+
+            setEnabled(true);
+        }
+    }
+
+
+    // ------------------------------------------------------------------
+    // Handle agent response
+    // ------------------------------------------------------------------
+
+    function handleAgentResponse(
+        data
+    ) {
+
+        if (
+            data.status ===
+            "completed"
+        ) {
+
+            addMessage(
+                "assistant",
+                data.text
+            );
+
+            setEnabled(true);
+
+            return;
+        }
+
+
+        if (
+            data.status ===
+            "approval_required"
+        ) {
+
+            for (
+                const approval
+                of data.approvals
+            ) {
+
+                showApproval(
+                    approval
+                );
+            }
+
+            return;
+        }
+
+
+        addMessage(
+            "assistant",
+            JSON.stringify(
+                data,
+                null,
+                2
+            )
+        );
+
+        setEnabled(true);
+    }
+
+
+    // ------------------------------------------------------------------
+    // Approval UI
+    // ------------------------------------------------------------------
+
+    function showApproval(
+        approval
+    ) {
+
+        const chat =
+            document.getElementById(
+                "chat"
+            );
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+        div.className =
+            "approval";
+
+
+        const title =
+            document.createElement(
+                "strong"
+            );
+
+        title.innerText =
+            "Agent approval required";
+
+        div.appendChild(
+            title
+        );
+
+
+        if (
+            approval.tool
+        ) {
+
+            const tool =
+                document.createElement(
+                    "p"
+                );
+
+            tool.innerText =
+                "Tool: " +
+                approval.tool;
+
+            div.appendChild(
+                tool
+            );
+        }
+
+
+        if (
+            approval.arguments
+        ) {
+
+            const pre =
+                document.createElement(
+                    "pre"
+                );
+
+            pre.innerText =
+                JSON.stringify(
+                    approval.arguments,
+                    null,
+                    2
+                );
+
+            div.appendChild(
+                pre
+            );
+        }
+
+
+        const approveButton =
+            document.createElement(
+                "button"
+            );
+
+        approveButton.className =
+            "approve";
+
+        approveButton.innerText =
+            "Approve";
+
+
+        approveButton.onclick =
+            () => submitApproval(
+                approval,
+                true,
+                div
+            );
+
+
+        const rejectButton =
+            document.createElement(
+                "button"
+            );
+
+        rejectButton.className =
+            "reject";
+
+        rejectButton.innerText =
+            "Reject";
+
+
+        rejectButton.onclick =
+            () => submitApproval(
+                approval,
+                false,
+                div
+            );
+
+
+        div.appendChild(
+            approveButton
+        );
+
+        div.appendChild(
+            rejectButton
+        );
+
+        chat.appendChild(
+            div
+        );
+
+        chat.scrollTop =
+            chat.scrollHeight;
+    }
+
+
+    // ------------------------------------------------------------------
+    // Send approval decision
+    // ------------------------------------------------------------------
+
+    async function submitApproval(
+        approval,
+        approved,
+        approvalElement
+    ) {
+
+        approvalElement.innerText =
+            approved
+                ? "Approval submitted..."
+                : "Rejection submitted...";
+
+
+        try {
+
+            const token =
+                await getToken();
+
+            const response =
+                await fetch(
+                    "/api/approval",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                "Bearer " +
+                                token
+                        },
+
+                        body: JSON.stringify({
+                            approval_id:
+                                approval.approval_id,
+
+                            approved:
+                                approved
+                        })
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                const error =
+                    await response.text();
+
+                throw new Error(
+                    error
+                );
+            }
+
+
+            const data =
+                await response.json();
+
+
+            approvalElement.remove();
+
+
+            handleAgentResponse(
+                data
+            );
+
+        } catch (error) {
+
+            approvalElement.innerText =
+                "Approval error: " +
+                error.message;
+
+            setEnabled(true);
+        }
+    }
+
+
+    // ------------------------------------------------------------------
+    // Events
+    // ------------------------------------------------------------------
+
+    document.getElementById(
+        "signin"
+    ).addEventListener(
+        "click",
+        signIn
+    );
+
+
+    document.getElementById(
+        "send"
+    ).addEventListener(
+        "click",
+        sendMessage
+    );
+
+
+    document.getElementById(
+        "message"
+    ).addEventListener(
+        "keydown",
+        function(event) {
+
+            if (
+                event.key ===
+                "Enter"
+            ) {
+                sendMessage();
+            }
+        }
+    );
+
+</script>
+
+</body>
+</html>

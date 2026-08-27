@@ -1,0 +1,9 @@
+{
+	"servers": {
+		"azure-mcp-on-gaur-via-aca": {
+			"url": "https://azure-mcp-obo-server.delightfulglacier-91f30c43.eastus2.azurecontainerapps.io",
+			"type": "http"
+		}
+	},
+	"inputs": []
+}
