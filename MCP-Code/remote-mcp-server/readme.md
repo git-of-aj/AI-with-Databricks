@@ -1,3 +1,22 @@
+## Commands and Tips:
+```sh
+mkdir code && cd code
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv python install 3.14
+uv venv
+source .venv/bin/activate
+python --version
+uv pip install agent-framework azure-identity dotenv
+```
+> az webapp create -g MyResourceGroup -p MyLinuxPlan -n MyUniqueAppName --runtime "PYTHON:3.14" --startup-file "gunicorn --bind=0.0.0.0 app:app"
+------------------
+- The advantage of the `OpenAI Agents SDK` or `MS-agent-framework` is that it handles the agent/tool loop for you, whereas the `lower-level Responses API` is appropriate when you want to own that loop yourself. OpenAI's documentation explicitly distinguishes those two use cases
+
+- with FoundryChatClient.get_mcp_tool(), the actual MCP tool call happens in the hosted/provider runtime, so your Python process does not directly receive a callback saying "get_user() was called." 
+
+- docs for Less code more easy MCP Interaction: https://learn.microsoft.com/en-us/agent-framework/agents/tools/hosted-mcp-tools?pivots=programming-language-python
+
+# OBO Flow in MCP 
 In simple English, this flow means:
 
 Browser → Microsoft Entra ID
