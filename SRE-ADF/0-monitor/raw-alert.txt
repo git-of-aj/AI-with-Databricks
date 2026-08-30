@@ -1,0 +1,64 @@
+================================================================================
+AZURE MONITOR ALERT
+================================================================================
+{
+  "schemaId": "azureMonitorCommonAlertSchema",
+  "data": {
+    "essentials": {
+      "alertId": "/subscriptions/38e274f8-10b9-4348-bd1d-62d18e5458d1/providers/Microsoft.AlertsManagement/alerts/513fed18-0d3c-1326-59ca-87c705e90024",
+      "alertRule": "webhook",
+      "targetResourceType": "microsoft.datafactory/factories",
+      "alertRuleID": "/subscriptions/38e274f8-10b9-4348-bd1d-62d18e5458d1/resourceGroups/adf/providers/microsoft.insights/scheduledqueryrules/webhook",
+      "severity": "Sev1",
+      "signalType": "Log",
+      "monitorCondition": "Fired",
+      "targetResourceGroup": "adf",
+      "monitoringService": "Log Alerts V2",
+      "alertTargetIDs": [
+        "/subscriptions/38e274f8-10b9-4348-bd1d-62d18e5458d1/resourcegroups/adf/providers/microsoft.datafactory/factories/adf-98"
+      ],
+      "configurationItems": [
+        "/subscriptions/38e274f8-10b9-4348-bd1d-62d18e5458d1/resourceGroups/adf/providers/Microsoft.DataFactory/factories/adf-98"
+      ],
+      "originAlertId": "12275f3e-7fb9-b125-596f-25abb1187888",
+      "firedDateTime": "2026-08-30T11:50:20.9344411Z",
+      "description": "",
+      "essentialsVersion": "1.0",
+      "alertContextVersion": "1.0",
+      "investigationLink": "https://portal.azure.com/#view/Microsoft_Azure_Monitoring_Alerts/Investigate.ReactView/alertId/%2fsubscriptions%2f38e274f8-10b9-4348-bd1d-62d18e5458d1%2fresourceGroups%2fadf%2fproviders%2fMicrosoft.AlertsManagement%2falerts%2f513fed18-0d3c-1326-59ca-87c705e90024",
+      "region": "centralindia"
+    },
+    "alertContext": {
+      "properties": {},
+      "conditionType": "LogQueryCriteria",
+      "condition": {
+        "windowSize": "PT5M",
+        "allOf": [
+          {
+            "searchQuery": "ADFActivityRun | where  Status == 'Failed'",
+            "metricMeasureColumn": null,
+            "targetResourceTypes": "['Microsoft.DataFactory/factories']",
+            "operator": "GreaterThan",
+            "threshold": "0",
+            "timeAggregation": "Count",
+            "dimensions": [],
+            "metricValue": 1.0,
+            "failingPeriods": {
+              "numberOfEvaluationPeriods": 1,
+              "minFailingPeriodsToAlert": 1
+            },
+            "linkToSearchResultsUI": "https://portal.azure.com#@05902c17-b586-4a82-a1b0-3502c27d30c2/blade/Microsoft_Azure_Monitoring_Logs/LogsBlade/source/Alerts.EmailLinks/scope/%7B%22resources%22%3A%5B%7B%22resourceId%22%3A%22%2Fsubscriptions%2F38e274f8-10b9-4348-bd1d-62d18e5458d1%2FresourceGroups%2Fadf%2Fproviders%2FMicrosoft.DataFactory%2Ffactories%2Fadf-98%22%7D%5D%7D/q/eJxzdHFzTC7JLMssqQwqzVOoUSjPSC1KVVAILkksKS1WsLVVUHdLzMxJTVEHAA%3D%3D/prettify/1/timespan/2026-08-30T11%3a44%3a47.0000000Z%2f2026-08-30T11%3a49%3a47.0000000Z",
+            "linkToFilteredSearchResultsUI": "https://portal.azure.com#@05902c17-b586-4a82-a1b0-3502c27d30c2/blade/Microsoft_Azure_Monitoring_Logs/LogsBlade/source/Alerts.EmailLinks/scope/%7B%22resources%22%3A%5B%7B%22resourceId%22%3A%22%2Fsubscriptions%2F38e274f8-10b9-4348-bd1d-62d18e5458d1%2FresourceGroups%2Fadf%2Fproviders%2FMicrosoft.DataFactory%2Ffactories%2Fadf-98%22%7D%5D%7D/q/eJxzdHFzTC7JLMssqQwqzVOoUSjPSC1KVVAILkksKS1WsLVVUHdLzMxJTVEHAA%3D%3D/prettify/1/timespan/2026-08-30T11%3a44%3a47.0000000Z%2f2026-08-30T11%3a49%3a47.0000000Z",
+            "linkToSearchResultsAPI": "https://api.loganalytics.io/v1/subscriptions/38e274f8-10b9-4348-bd1d-62d18e5458d1/resourceGroups/adf/providers/Microsoft.DataFactory/factories/adf-98/query?query=ADFActivityRun%20%7C%20where%20%20Status%20%3D%3D%20%27Failed%27&timespan=2026-08-30T11%3a44%3a47.0000000Z%2f2026-08-30T11%3a49%3a47.0000000Z",
+            "linkToFilteredSearchResultsAPI": "https://api.loganalytics.io/v1/subscriptions/38e274f8-10b9-4348-bd1d-62d18e5458d1/resourceGroups/adf/providers/Microsoft.DataFactory/factories/adf-98/query?query=ADFActivityRun%20%7C%20where%20%20Status%20%3D%3D%20%27Failed%27&timespan=2026-08-30T11%3a44%3a47.0000000Z%2f2026-08-30T11%3a49%3a47.0000000Z",
+            "event": null
+          }
+        ],
+        "windowStartTime": "2026-08-30T11:44:47Z",
+        "windowEndTime": "2026-08-30T11:49:47Z"
+      }
+    },
+    "customProperties": {}
+  }
+}
+================================================================================

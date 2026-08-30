@@ -1,0 +1,18 @@
+
+@formatDateTime(utcnow(), 'yyyy-MM-dd-HH-mm-ss')
+
+func azure functionapp publish monitor-ind-78 --python
+
+coz azure function loopback period was 5 min so adf pipeline resolved @7:55 azure portal displays resolve at 8:01 
+
+
+Links: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/api/access-api?tabs=SDK
+
+
+grant monitoring reader role to app registarion at ADF RG
+[Doubt] App Registartion > API Permisisons > Delegated permissions > Log Analytics API > Data.Read  
+
+[Tested] Granting reader + monitoring reader at log analytics level doesn't help u get 403 
+
+pip install azure-identity python-dotenv requests fastapi
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
