@@ -95,115 +95,117 @@ print("Successfully obtained Databricks OAuth access token.")
 # Call Databricks Token Management API
 # ============================================================
 
-url = f"{DATABRICKS_HOST}/api/2.0/token-management/tokens"
+def get_databricks_pat_details():
 
-response = requests.get(
-    url,
-    headers={
-        "Authorization": f"Bearer {access_token}",
-        "Content-Type": "application/json",
-    },
-    timeout=30,
-)
+    url = f"{DATABRICKS_HOST}/api/2.0/token-management/tokens"
 
-
-# ============================================================
-# Error handling
-# ============================================================
-
-if not response.ok:
-    print("Databricks API request failed")
-    print("HTTP status:", response.status_code)
-    print("Response:", response.text)
-    response.raise_for_status()
+    response = requests.get(
+        url,
+        headers={
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/json",
+        },
+        timeout=30,
+    )
 
 
-# ============================================================
-# Parse response
-# ============================================================
+    # ============================================================
+    # Error handling
+    # ============================================================
 
-data = response.json()
+    if not response.ok:
+        print("Databricks API request failed")
+        print("HTTP status:", response.status_code)
+        print("Response:", response.text)
+        response.raise_for_status()
 
-token_infos = data.get("token_infos", [])
 
-if not token_infos:
-    print("No token information returned.")
-else:
-    for token_info in token_infos:
+    # ============================================================
+    # Parse response
+    # ============================================================
 
-        print("=" * 60)
+    data = response.json()
 
-        print(
-            "Token ID:        ",
-            token_info.get("token_id")
-        )
+    token_infos = data.get("token_infos", [])
 
-        print(
-            "Created by:      ",
-            token_info.get("created_by_username")
-        )
+    if not token_infos:
+        print("No token information returned.")
+    else:
+        for token_info in token_infos:
 
-        print(
-            "Comment:         ",
-            token_info.get("comment")
-        )
+            print("=" * 60)
 
-        print(
-            "Scopes:          ",
-            token_info.get("scopes")
-        )
-
-        print(
-            "Workspace ID:    ",
-            token_info.get("workspace_id")
-        )
-
-        print(
-            "Owner ID:        ",
-            token_info.get("owner_id")
-        )
-
-        # ----------------------------------------------------
-        # Creation time
-        # ----------------------------------------------------
-
-        creation = token_info.get("creation_time")
-
-        if creation:
             print(
-                "Created:         ",
-                datetime.fromtimestamp(
-                    creation / 1000,
-                    timezone.utc
-                )
+                "Token ID:        ",
+                token_info.get("token_id")
             )
 
-        # ----------------------------------------------------
-        # Expiry time
-        # ----------------------------------------------------
-
-        expiry = token_info.get("expiry_time")
-
-        if expiry:
             print(
-                "Expires:         ",
-                datetime.fromtimestamp(
-                    expiry / 1000,
-                    timezone.utc
-                )
+                "Created by:      ",
+                token_info.get("created_by_username")
             )
 
-        # ----------------------------------------------------
-        # Last used
-        # ----------------------------------------------------
-
-        last_used = token_info.get("last_used_day")
-
-        if last_used:
             print(
-                "Last used:       ",
-                datetime.fromtimestamp(
-                    last_used / 1000,
-                    timezone.utc
-                )
+                "Comment:         ",
+                token_info.get("comment")
             )
+
+            print(
+                "Scopes:          ",
+                token_info.get("scopes")
+            )
+
+            print(
+                "Workspace ID:    ",
+                token_info.get("workspace_id")
+            )
+
+            print(
+                "Owner ID:        ",
+                token_info.get("owner_id")
+            )
+
+            # ----------------------------------------------------
+            # Creation time
+            # ----------------------------------------------------
+
+            creation = token_info.get("creation_time")
+
+            if creation:
+                print(
+                    "Created:         ",
+                    datetime.fromtimestamp(
+                        creation / 1000,
+                        timezone.utc
+                    )
+                )
+
+            # ----------------------------------------------------
+            # Expiry time
+            # ----------------------------------------------------
+
+            expiry = token_info.get("expiry_time")
+
+            if expiry:
+                print(
+                    "Expires:         ",
+                    datetime.fromtimestamp(
+                        expiry / 1000,
+                        timezone.utc
+                    )
+                )
+
+            # ----------------------------------------------------
+            # Last used
+            # ----------------------------------------------------
+
+            last_used = token_info.get("last_used_day")
+
+            if last_used:
+                print(
+                    "Last used:       ",
+                    datetime.fromtimestamp(
+                        last_used / 1000,
+                        timezone.utc
+                    )
+                )

@@ -1,0 +1,13 @@
+{
+	"servers": {
+		"ADF and AZ Databricks": {
+		"type": "stdio",
+		"command": "C:\\Users\\anana\\Downloads\\AI-with-Databricks\\SRE-ADF\\venv\\Scripts\\python.exe",
+		"args": [
+			"local_mcp.py"
+		],
+		"cwd": "C:\\Users\\anana\\Downloads\\AI-with-Databricks\\SRE-ADF\\1-AI\\custom-tools"
+	}
+	},
+	"inputs": []
+}

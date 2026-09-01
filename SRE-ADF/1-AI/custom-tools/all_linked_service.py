@@ -64,3 +64,5 @@ def adf_get_all_linked_services():
             sep='\n'
         )
         print("_"*50)
+
+adf_get_all_linked_services()
