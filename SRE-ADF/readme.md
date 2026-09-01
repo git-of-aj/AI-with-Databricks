@@ -1,3 +1,43 @@
+## Databricks Service principal
+https://learn.microsoft.com/en-us/azure/databricks/admin/users-groups/service-principals
+
+The Azure Databricks host.
+
+- For account operations, specify https://accounts.azuredatabricks.net.
+- For workspace operations, Databricks recommends specifying the per-workspace URL, for example https://adb-1234567890123456.7.azuredatabricks.net and explicitly assigning the Microsoft Entra service principal to the workspace. Alternatively, specify the Azure resource ID. This approach requires Contributor or Owner permissions on the Azure resource, or a custom role with specific Azure Databricks permissions.
+Link: https://learn.microsoft.com/en-us/azure/databricks/dev-tools/auth/azure-sp
+- Databricks recommends using DATABRICKS_HOST and explicitly assigning the Microsoft Entra service principal to the workspace. Alternatively, use DATABRICKS_AZURE_RESOURCE_ID with the Azure resource ID. This approach requires Contributor or Owner permissions on the Azure resource, or a custom role with specific Azure Databricks permissions.
+
+## Azure-identity
+- for managed identity: https://learn.microsoft.com/en-us/python/api/overview/azure/identity-readme?view=azure-python#authenticate-azure-hosted-applications
+
+## Handle response
+how do you know if its json or dictionary ?
+
+Good question. The key is that JSON and Python dictionaries are not the same thing.
+
+1. response.json() returns a Python object
+
+With the requests library:
+
+data = response.json()
+
+The .json() method reads the JSON response and converts it into Python data structures.
+
+For your response, the conversion is roughly:
+
+JSON                         Python
+------------------------------------------------
+{ }                          dict
+[ ]                          list
+"hello"                      str
+123                          int
+true                         True
+false                        False
+null                         None
+
+So your JSON:
+
 ### Azure Monitor Alert Beahviour 
 ```txt
 ADF failures
