@@ -1,3 +1,7 @@
+# Imp - Model Quota and TPM Azure 
+> Tier 5 and Tier 6 subscriptions have latest models. Like: https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/reasoning?tabs=python%2Cgpt-6#region-availability
+Enterprise Agreement (EA) or Microsoft Customer Agreement for Enterprise (MCA-E): You are likely pre-qualified for higher tiers (Tiers 3–6) depending on your usage spend.
+
 - [Gemini on Databricks AI Uses](https://gemini.google.com/app/767ffbb1dda1c37b)
 - [databricks AI functions](https://www.databricks.com/blog/pdfs-production-announcing-state-art-document-intelligence-databricks-article) and [youtube](https://www.youtube.com/watch?v=Gbp9hyx6yPs&list=PL7S7dD8r4QdU_JwlmC8sBzx920pUMKadF&index=11)
 - [Databricks certified AI Engineer](https://www.databricks.com/sites/default/files/2026-03/Databricks-Certified-Generative-AI-Engineer-Associate-Exam-Guide-Mar26.pdf
