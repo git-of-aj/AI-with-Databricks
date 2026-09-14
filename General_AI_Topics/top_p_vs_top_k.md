@@ -32,4 +32,13 @@ So I'd phrase it as:
 - **Top P:** “Only consider tokens within this probability budget.”
 - **Top K:** “Only consider the best K tokens.”
 
+Sampling techniques control how language models choose the next word during text generation. The model assigns probabilities to possible words and sampling determines which one is picked. By adjusting these methods, you can balance creativity and accuracy in generated responses.
+
+Temperature controls randomness in predictions
+- Top-K limits choices to the most probable tokens
+- Top-P selects tokens based on cumulative probability
+Used to tune output diversity and coherence
+
+- Low temperature: Safer, more predictable text
+- High temperature: More creative and varied text
 > **Important:** `top_p` and `top_k` are not competing versions of temperature—they filter the candidate pool, while temperature changes the probability distribution itself.
