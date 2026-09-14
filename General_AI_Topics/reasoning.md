@@ -18,7 +18,7 @@ Persisted reasoning is about continuity, not transparency. The reasoning items s
 ![](https://learn.microsoft.com/en-us/azure/foundry/openai/media/how-to/reasoning/reasoning-context-modes.svg)
 
 - In code: The `reasoning_effort parameter` controls how much the model thinks before it answers. Supported values vary by model and include none, minimal, low, medium, high, xhigh, and max. Defaults vary by model as well. For the values each model accepts, see API and feature support.
-- ```py
+```py
   second = client.responses.create(
     model="gpt-5.6",
     previous_response_id=first.id,
@@ -26,3 +26,9 @@ Persisted reasoning is about continuity, not transparency. The reasoning items s
     reasoning={"context": "all_turns"},
 )
 ```
+### Prompting Guide:
+Reasoning models work best when you give them a clear goal, firm constraints, and an explicit output contract. Unlike non-reasoning models, they don't need you to prescribe every intermediate step.
+
+- State the task, the constraints, and the output format you expect.
+- Treat reasoning_effort as a tuning knob rather than the first thing you reach for when quality drops.
+- For agentic or research-heavy workflows, define what counts as done and how the model should verify its own work.
