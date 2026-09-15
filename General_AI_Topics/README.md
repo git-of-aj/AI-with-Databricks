@@ -4,7 +4,10 @@ Enterprise Agreement (EA) or Microsoft Customer Agreement for Enterprise (MCA-E)
 
 - [Gemini on Databricks AI Uses](https://gemini.google.com/app/767ffbb1dda1c37b)
 - [databricks AI functions](https://www.databricks.com/blog/pdfs-production-announcing-state-art-document-intelligence-databricks-article) and [youtube](https://www.youtube.com/watch?v=Gbp9hyx6yPs&list=PL7S7dD8r4QdU_JwlmC8sBzx920pUMKadF&index=11)
-- [Databricks certified AI Engineer](https://www.databricks.com/sites/default/files/2026-03/Databricks-Certified-Generative-AI-Engineer-Associate-Exam-Guide-Mar26.pdf
+- [Databricks certified AI Engineer](https://www.databricks.com/sites/default/files/2026-03/Databricks-Certified-Generative-AI-Engineer-Associate-Exam-Guide-Mar26.pdf)
+
+## Good Links:
+- https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/building-production-ready-secure-observable-ai-agents-with-real-time-voice-with-/4501074
 
 ## How LLMs actually work ? - [Redidit](https://www.reddit.com/r/LocalLLaMA/comments/18fhgzf/sorry_if_this_is_a_dumb_question_but_is_the_main/)
 Your original explanation is actually incredibly accurate and captures the core autoregressive loop perfectly! You've already nailed the basic mechanics.
