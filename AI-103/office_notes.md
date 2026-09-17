@@ -115,6 +115,8 @@ Enable diagnostic settings via the Azure Portal under your Foundry resource by r
 * **Tracing:** Shows ordered span sequences of LLM calls, tool invocations, and timing within a single run to diagnose latency and correctness issues. Connect **Application Insights** to your project for server-side tracing.
 
 ---
+# MS DOCS:
+
 ### Foundry SDK:
 > Create a project in West US 3 try an instant model (preview).
 ```py
@@ -167,5 +169,17 @@ response = openai.responses.create(
 print(response.output_text)
 ```
 
-
-
+### Agent types: 
+✅ `pip install -U` The -U (or --upgrade) flag in the pip install command instructs pip to upgrade the specified packages to the newest available version.
+> You can start declarative (Prompt Agent) and move to code as your needs grow. Foundry Project Manager at project scope. If you need to create a new Foundry project, you need the Owner role at resource group scope.
+1. **Prompt Agent**:
+- created via foundry portal or sdk
+- foundry hosts and runs them
+- no app code or compute to maintain
+2. **Hosted agent**:
+  - Bring your code ( Microsoft Agent Framework, LangGraph, or Semantic Kernel)
+  - Foundry runs it with a managed endpoint, scaling, identity, and observability
+  - https://learn.microsoft.com/en-us/azure/foundry/agents/quickstarts/quickstart-hosted-agent?pivots=azd
+  - **MS Agent Framework**: `pip install -U agent-framework agent-framework-foundry-hosting azure-identity python-dotenv`
+  - `ResponsesHostServer` for the OpenAI-compatible /responses endpoint.
+`InvocationsHostServer` for the generic /invocations endpoint.
