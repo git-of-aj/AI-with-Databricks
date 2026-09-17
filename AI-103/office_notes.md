@@ -113,3 +113,59 @@ Enable diagnostic settings via the Azure Portal under your Foundry resource by r
 | **AllMetrics** | Resource-level and system metrics (error rates, counts). | Azure Monitor Metrics / Log Analytics |
 
 * **Tracing:** Shows ordered span sequences of LLM calls, tool invocations, and timing within a single run to diagnose latency and correctness issues. Connect **Application Insights** to your project for server-side tracing.
+
+---
+### Foundry SDK:
+> Create a project in West US 3 try an instant model (preview).
+```py
+pip install "azure-ai-projects>=2.3.0" azure-identity
+project = AIProjectClient(
+    endpoint=FOUNDRY_PROJECT_ENDPOINT,
+    credential=DefaultAzureCredential(),
+)
+openai = project.get_openai_client()
+
+# Run a responses API call
+response = openai.responses.create(
+    model="gpt-5-mini",  # supports all Foundry direct models
+    input="What is the size of France in square miles?",
+)
+print(f"Response output: {response.output_text}")
+```
+- Foundry Agent = Model + System Instructions + Tools. Benefit: it ensures consistent responses in user interactions without repeating instructions each time
+
+```py
+agent = project.agents.create_version(
+    agent_name=FOUNDRY_AGENT_NAME,
+    definition=PromptAgentDefinition(
+        model="gpt-5-mini",  # supports all Foundry direct models
+        instructions="You are a helpful assistant that answers general questions",
+    ),
+)
+print(f"Agent created (id: {agent.id}, name: {agent.name}, version: {agent.version})")
+```
+- Once u got agent, chat with it
+
+```py
+openai = project.get_openai_client(agent_name=FOUNDRY_AGENT_NAME) =========
+
+# Create a conversation for multi-turn chat
+conversation = openai.conversations.create() ==========***
+
+# Chat with the agent to answer questions
+response = openai.responses.create(
+    conversation=conversation.id,  ==========***
+    input="What is the size of France in square miles?",
+)
+print(response.output_text)
+
+# Ask a follow-up question in the same conversation
+response = openai.responses.create(
+    conversation=conversation.id,  ==========***
+    input="And what is the capital city?",
+)
+print(response.output_text)
+```
+
+
+
