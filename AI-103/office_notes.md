@@ -21,14 +21,16 @@ The [Content Understanding Studio](https://contentunderstanding.ai.azure.com/) h
 
 ### Content Understanding Analyzers
 
-| Analyzer Type | Target Goal & Best Use Case |
-| --- | --- |
-| **Document Layout Analyzer** | Document structure: reading order, paragraphs, sections, tables, figures. Ideal for RAG, search, and complex PDFs. |
-| **Invoice Analyzer** | Specifically for invoices, utility bills, and sales orders to extract vendor, totals, dates, and line items. |
-| **Call Center Analyzer** | Analyzing audio and call-center conversations (transcripts, summaries, sentiment, and classification). |
-| **Tax (US) Analyzer** | Prebuilt analyzers specifically for US tax forms (Form 1040 and schedules). |
-| **OCR Read Analyzer** | General text recognition/OCR when layout-aware extraction isn't specifically required. |
-| **Document Fields Analyzer** | Extracting custom-defined fields (e.g., contract party, renewal date, policy number). |
+`Analyzer = Brain` ... defines how your content is analyzed and what information is extracted. 
+- can use prebuilt analyzers for common scenarios or create custom analyzers tailored to your specific needs.
+- An analyzer defines:
+
+1. What type of content to process (documents, images, audio, or video)
+2. What elements to extract (text, layout, tables, fields, transcripts)
+3. How to structure the output (markdown, JSON fields, segments)
+4. Which AI models to use for processing
+
+https://learn.microsoft.com/en-us/azure/ai-services/content-understanding/concepts/analyzer-reference#analyzer-types
 
 ### Schema Creation & Cost Optimization Workflow
 
